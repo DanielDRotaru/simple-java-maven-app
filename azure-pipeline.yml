@@ -1,1 +1,22 @@
-s
+#Create pipeline for a simple java maven apptrigger:
+  - master
+  # add "master" here if you use that branch
+
+pool:
+  name: 'Azure-agent'
+
+steps:
+  - script: |
+      java -version
+      mvn -v
+    displayName: 'Show Java and Maven versions'
+
+  - script: mvn clean package
+    displayName: 'Build and test with Maven'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish artifact'
+    inputs:
+      PathtoPublish: 'target'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
